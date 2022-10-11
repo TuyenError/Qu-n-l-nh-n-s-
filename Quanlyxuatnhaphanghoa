@@ -1,0 +1,139 @@
+create database Quanlyxuatnhaphanghoa;
+use Quanlyxuatnhaphanghoa;
+
+
+
+create table LoaiHang(
+MaLoai varchar(3) primary key,
+TenLoai varchar(30));
+
+insert into LoaiHang(MaLoai,TenLoai)
+values ('K1','KẸO'),
+	   ('B2','BÁNH'),
+       ('TC3','TRÁI CÂY'),
+       ('NN4','NƯỚC NGỌT');
+SELECT * From LoaiHang;
+
+create table HangHoa (
+MaHang varchar(6) primary key,
+MaLoai varchar(3),
+TenHang varchar(50),
+foreign key( MaLoai) references LoaiHang(MaLoai));
+
+insert into HangHoa(MaHang,MaLoai,TenHang)
+values (1,'K1','KẸO'),
+	   (2,'B2','BÁNH'),
+       (3,'TC3','TRÁI CÂY'),
+       (4,'NN4','NƯỚC NGỌT');
+SELECT * From HangHoa;
+
+create table NhaCungCap(
+MaNCC varchar(10) primary key,
+TenNCC VARCHAR(30),
+DiaChi varchar(100),
+DienThoai varchar(15));
+
+insert into NhaCungCap(MaNCC,TenNCC,DiaChi,DienThoai)
+values ('KD1','Kinh Đô','12 Hàng Than, Hà Nội', 02437192355),
+       ('HH2','HẢI HÀ', '45 Trung Du,Khánh Hòa', 02437192567),
+       ('HC3','HẢI CHÂU','89 Ngô Quyền, Nha Trang', 02457869761),
+       ('TA4','TRANG AN','101C Thành Sơn, Đà Nẵng', 02977869761);
+
+create table KhachHang(
+MaKH varchar(10) primary key,
+TenKH varchar(30),
+DiaChi Varchar(100),
+SDT varchar(15));
+insert into KhachHang(MaKH,TenKH,DiaChi,SDT)
+values ('CT6','CAO TUYEN','101B Lê Hữu Trác', 0964984046),
+	   ('NT2','NHÂN TỪ','789 Hữu Trung',0905081174),
+       ('HD4','HỒNG DUYỆT','89 Trung Quang', 08661490760),
+       ('KN3','RSON RINA','79B Gia Lai',03786174620);
+	
+create table NhanVien(
+MaNV varchar(10) primary key,
+TenNV varchar(30),
+Username varchar(20),
+Passwords varchar(20));
+
+insert into NhanVien(MaNV,TenNV,Username,Passwords)
+values ('PTH','PHẠM THỊ HỈ','Thihi234', '7759thihi'),
+       ('TXX','HỒ THỊ TÀI','Taixoan2002', 'Tai1234'),
+       ('YKT','Y KIM TRA','Kimtra', 'Tray1900'),
+       ('AAT','A ÂN TỨ','Antu8k0', 'Tu9090');
+
+
+
+creaTe table Hoadonnhap(
+MaHD VARCHAR(10) PRIMARY KEY,
+Ngay datetime,
+MaNCC VARCHAR(10),
+MaNV VARCHAR(10),
+Foreign Key(MaNCC) references NhaCungCap(MaNCC),
+Foreign Key(MaNV) references NhanVien(MaNV),
+Diengiai varchar(100));
+
+insert into Hoadonnhap(MaHD,Ngay,MaNCC,MaNV,Diengiai)
+values ('HD10','2022-09-27','KD1', 'PTH',NULL),
+	   ('HD20','2022-08-10','HH2', 'TXX',NULL),
+       ('HD30','2022-10-14','HC3', 'YKT',NULL),
+       ('HD40','2022-05-27','TA4', 'AAT',NULL);
+
+
+create table chitietHDnhap(
+MaHD varchar(10),
+foreign key(MaHD) references Hoadonnhap(MaHD),
+MaHang varchar(6),
+SoLuong SmallINT(6),
+foreign key (MaHang) references HangHoa(MaHang),
+PRIMARY KEY(MaHD,MaHang),
+Dongia Float(7,1));
+
+insert into chitietHDnhap(MaHD,MaHang,SoLuong,Dongia)
+values ('HD10',1,10,100000),
+       ('HD20',2,30,300000),
+       ('HD30',3,20,400000),
+       ('HD40',4,40,800000);
+
+
+
+create table HoaDonXuat(
+MaHD varchar(10) ,
+MaKH varchar(10),
+Ngay Datetime,
+MaNV varchar(10),
+Diengiai varchar (100),
+primary key (MaHD),
+foreign key(MaNV) references NhanVien(MaNV),
+FOREIGN KEY(MaKH) references khachhang(MaKH));
+
+insert into HoaDonXuat(MaHD,MaKH,Ngay,MaNV,Diengiai)
+values ('HD10','CT6','2022-09-27','PTH',NULL),
+	   ('HD20','NT2','2022-08-10','TXX',NULL),
+       ('HD30','HD4','2022-10-14','YKT',NULL),
+       ('HD40','KN3','2022-05-27','AAT',NULL);
+
+
+create table ChitietHDxuat(
+MaHD VARCHAR(10), 
+foreign key (MaHD) references HoaDonXuat(MaHD),
+MaHang Varchar(6) ,
+FOREIGN KEY(MaHang) REFERENCES HangHoa(MaHang),
+SoLuong SmallInt(6),
+primary key(MaHD,MaHang),
+Dongia Float (7,1));
+
+insert into ChitietHDxuat(MaHD,MaHang,SoLuong,Dongia)
+values ('HD10',1,10,100000),
+       ('HD20',2,30,300000),
+       ('HD30',3,20,400000),
+       ('HD40',4,40,800000);
+       
+
+
+-- ---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
